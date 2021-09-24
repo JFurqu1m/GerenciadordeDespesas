@@ -1,0 +1,19 @@
+[
+  {
+    "outputFileName": "wwwroot/bundle.js",
+    "inputFiles": [
+      "wwwroot/js/GraficoGastoMes.js",
+      "wwwroot/js/site.min.js",
+      "wwwroot/js/site.js",
+      "wwwroot/js/MetodosGerais.js",
+      "wwwroot/js/GraficoTotalMes.js",
+      "wwwroot/js/GraficoGastosTotais.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css"
+    ]
+  }
+]

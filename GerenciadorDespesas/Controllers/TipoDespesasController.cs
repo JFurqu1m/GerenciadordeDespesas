@@ -18,12 +18,46 @@ namespace GerenciadorDespesas.Controllers
             _context = context;
         }
 
-        // GET: TipoDespesas
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await _context.TipoDespesas.ToListAsync());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Index(string txtProcurar)
+        {
+            if(!String.IsNullOrEmpty(txtProcurar))
+                return View(await _context.TipoDespesas.Where(td => td.Nome.ToUpper().Contains(txtProcurar.ToUpper())).ToListAsync());
+
+            return View(await _context.TipoDespesas.ToListAsync());
+        }
+
+        public async Task<JsonResult> TipoDespesaExiste(string nome)
+        {
+            if (await _context.TipoDespesas.AnyAsync(td => td.Nome.ToUpper() == nome.ToUpper()))
+                return Json("Esse tipo de despesa já existe!");
+
+            return Json(true);
+        }
+
+        public JsonResult AdicionarTipoDespesa(string txtDespesa)
+        {
+            if (!String.IsNullOrEmpty(txtDespesa))
+            {
+                if(!_context.TipoDespesas.Any(td => td.Nome.ToUpper() == txtDespesa.ToUpper()))
+                {
+                    TipoDespesas tipoDespesas = new TipoDespesas();
+                    tipoDespesas.Nome = txtDespesa;
+                    _context.Add(tipoDespesas);
+                    _context.SaveChanges();
+
+                    return Json(true);
+                }
+            }
+
+            return Json(false);
+        }
 
         // GET: TipoDespesas/Create
         public IActionResult Create()
@@ -41,6 +75,7 @@ namespace GerenciadorDespesas.Controllers
             if (ModelState.IsValid)
             {
                 TempData["Confirmacao"] = tipoDespesas.Nome + " foi cadastrado com sucesso.";
+
                 _context.Add(tipoDespesas);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
